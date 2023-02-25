@@ -13,7 +13,7 @@ let estoyVivo = true;
 
 class Hielocos extends Phaser.Scene{
     constructor(){
-        super();
+        super('Hielocos');
     }
 
     preload(){
@@ -24,8 +24,8 @@ class Hielocos extends Phaser.Scene{
     }
     
     create(){
-        this.scale.displaySize.setAspectRatio(ANCHO/ALTO);
-        this.scale.refresh();
+        this.scale.displaySize.setAspectRatio( ANCHO/ALTO); //CELULAR
+        this.scale.refresh(); //CELULAR
         this.fondo = this.add.tileSprite(0, 0, 0, 0, 'fondo_oceano')
         .setOrigin(0)
         .setScrollFactor(0, 1);
@@ -36,7 +36,6 @@ class Hielocos extends Phaser.Scene{
             frameRate: 15,
             repeat: -1
         });
-
         const spritePinguino = this.physics.add.sprite(arrayCarril[1], 900, 'pinguino').setScale(2);
         spritePinguino.anims.load('nadar');
         spritePinguino.anims.play('nadar');
@@ -48,7 +47,7 @@ class Hielocos extends Phaser.Scene{
             align: 'center'});
         grupoHielos = this.physics.add.group();
 
-        this.input.on('pointerdown', function (pointer){
+        this.input.on('pointerdown', function (pointer) {
             let puntoX = pointer.x;
             //let puntoY = pointer.y;
             let carril = Math.floor(puntoX / anchoCarril );
@@ -58,7 +57,7 @@ class Hielocos extends Phaser.Scene{
         });
         this.physics.add.collider(spritePinguino, grupoHielos, function (pinguinito, hielito){
             if (pinguinito.body.touching && hielito.body.touching){
-               
+               //chocas
                hielito.removeInteractive();
                hielito.removedFromScene();
                hielito.destroy();
@@ -69,6 +68,7 @@ class Hielocos extends Phaser.Scene{
                 spritePinguino.removeInteractive();
                 spritePinguino.removedFromScene();
                 spritePinguino.destroy();
+                   
                 estoyVivo = false;
                 console.log('Moriste');
                 terminar();
@@ -84,7 +84,7 @@ class Hielocos extends Phaser.Scene{
     update(tiempo, delta){
         this.fondo.tilePositionY -= velocidadFondo;
         temporizadorHielocos += delta;
-        while( (temporizadorHielocos > deltaHieloco) && estoyVivo) {
+        while( (temporizadorHielocos > deltaHieloco) && estoyVivo){
             //console.log(temporizadorHielocos);
             temporizadorHielocos -= deltaHieloco;
             let carril = Math.floor(Math.random() * 3);
@@ -99,7 +99,8 @@ class Hielocos extends Phaser.Scene{
 
 }
 
-const configuracion ={
+const configuracion =
+{
     type: Phaser.ANCHO,
     width: ANCHO,
     height: ALTO,
@@ -108,13 +109,13 @@ const configuracion ={
     physics: {
         default: 'arcade',
         arcade: {
-            debug: true
+            debug: false 
         }
     },
-    scale:{
-        mode: Phaser.Scale.FIT,
+    scale: {
+        mode: Phaser.Scale.FIT, /* CELULAR*/
     },
     scene: [Hielocos, GameOver]
-};  
+};
 
 const juego = new Phaser.Game(configuracion);
